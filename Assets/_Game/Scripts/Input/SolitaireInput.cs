@@ -12,12 +12,16 @@ namespace Game.Input
     [SerializeField]
     private GameView _gameView = null!;
 
+    [SerializeField]
+    private Transform _movingCardTransform = null!;
+
     private Card? _selectedCard;
     private CardView? _selectedCardView;
     private bool _isDragging;
     private Vector3 _dragOffset;
     private Canvas _canvas = null!;
     private Camera _camera = null!;
+    private Transform? _originalParent;
 
     private readonly List<RaycastResult> _results = new();
 
@@ -71,7 +75,8 @@ namespace Game.Input
       var mouseWorldPos = GetMouseWorldPosition();
       _dragOffset = cardView.transform.position - mouseWorldPos;
 
-      cardView.transform.SetAsLastSibling();
+      _originalParent = cardView.transform.parent;
+      cardView.transform.SetParent(_movingCardTransform, true);
     }
 
     private void HandleMouseDrag()
@@ -197,10 +202,15 @@ namespace Game.Input
 
     private void ResetSelection()
     {
+      if (_selectedCardView != null && _originalParent != null) {
+        _selectedCardView.transform.SetParent(_originalParent, true);
+      }
+
       _selectedCard = null;
       _selectedCardView = null;
       _isDragging = false;
       _dragOffset = Vector3.zero;
+      _originalParent = null;
     }
   }
 }
