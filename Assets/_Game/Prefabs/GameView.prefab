@@ -196,6 +196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c362bb56cbff34e86a421bc90e96aad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cardInStackOffset: 95
+  _cardViewPrefab: {fileID: 100611258872105627, guid: aef86ba89faeb4744a20e89fe7235606, type: 3}
   _tableauViews:
   - {fileID: 6722496654895418683}
   - {fileID: 5369726044440091864}
@@ -262,8 +264,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d276898632ff4a6baccbf735dbf3af7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cardInStackOffset: 80
-  _cardViewPrefab: {fileID: 100611258872105627, guid: aef86ba89faeb4744a20e89fe7235606, type: 3}
   <BoardView>k__BackingField: {fileID: 287561323249175473}
 --- !u!114 &1128676181980510822
 MonoBehaviour:

@@ -90,7 +90,16 @@ namespace Game.View
 
     public void RefreshAllViews()
     {
+      UpdateCardViewParents();
       UpdateCardViewPositions();
+    }
+
+    private void UpdateCardViewParents()
+    {
+      UpdateCardViewParentsForPiles(Board.Tableau, GetTableauView);
+      UpdateCardViewParentsForPiles(Board.Foundations, GetFoundationView);
+      UpdateCardViewParentsForPile(Board.Deck, GetDeckView());
+      UpdateCardViewParentsForPile(Board.WastePile, GetWasteView());
     }
 
     private void UpdateCardViewPositions()
@@ -101,10 +110,36 @@ namespace Game.View
       UpdateCardViewPositionsForPile(Board.WastePile, GetWasteView());
     }
 
+    private void UpdateCardViewParentsForPiles(Pile[] piles, System.Func<int, PileView> getPileView)
+    {
+      for (var i = 0; i < piles.Length; i++) {
+        UpdateCardViewParentsForPile(piles[i], getPileView(i));
+      }
+    }
+
     private void UpdateCardViewPositionsForPiles(Pile[] piles, System.Func<int, PileView> getPileView)
     {
       for (var i = 0; i < piles.Length; i++) {
         UpdateCardViewPositionsForPile(piles[i], getPileView(i));
+      }
+    }
+
+    private void UpdateCardViewParentsForPile(Pile pile, PileView pileView)
+    {
+      var current = pile.FirstChild;
+      CardView? previousCardView = null;
+
+      while (current != null) {
+        if (_cardViews.TryGetValue(current, out var cardView)) {
+          if (previousCardView == null) {
+            cardView.transform.SetParent(pileView.transform);
+          } else {
+            cardView.transform.SetParent(previousCardView.transform);
+          }
+          previousCardView = cardView;
+        }
+
+        current = current.Child;
       }
     }
 
@@ -115,8 +150,7 @@ namespace Game.View
 
       while (current != null) {
         if (_cardViews.TryGetValue(current, out var cardView)) {
-          cardView.transform.SetParent(pileView.transform);
-          PositionCardInPile(cardView, cardIndex, pile.PileKind);
+          PositionCardInPile(cardView, cardIndex, pile.PileKind, cardIndex > 0);
         }
 
         current = current.Child;
@@ -124,12 +158,14 @@ namespace Game.View
       }
     }
 
-    private void PositionCardInPile(CardView cardView, int index, PileKind pileKind)
+    private void PositionCardInPile(CardView cardView, int index, PileKind pileKind, bool isChildCard)
     {
       var position = pileKind switch {
+        PileKind.Tableau when isChildCard => new(0, -_cardInStackOffset, -0.01f),
         PileKind.Tableau => new(0, -index * _cardInStackOffset, -index * 0.01f),
+        PileKind.Foundation or PileKind.Deck or PileKind.WastePile when isChildCard => new(0, 0, -0.01f),
         PileKind.Foundation or PileKind.Deck or PileKind.WastePile => new(0, 0, -index * 0.01f),
-        _ => Vector3.zero
+        _ => Vector3.zero,
       };
 
       cardView.transform.localPosition = position;

@@ -20,7 +20,6 @@ namespace Game.View
     private Vector3 _dragOffset;
     private Canvas _canvas = null!;
     private Camera _camera = null!;
-    private Transform? _originalParent;
 
     private readonly List<RaycastResult> _results = new();
 
@@ -70,7 +69,6 @@ namespace Game.View
       var mouseWorldPos = GetMouseWorldPosition();
       _dragOffset = cardView.transform.position - mouseWorldPos;
 
-      _originalParent = cardView.transform.parent;
       cardView.transform.SetParent(_movingCardTransform, true);
     }
 
@@ -197,15 +195,10 @@ namespace Game.View
 
     private void ResetSelection()
     {
-      if (_selectedCardView != null && _originalParent != null) {
-        _selectedCardView.transform.SetParent(_originalParent, true);
-      }
-
       _selectedCard = null;
       _selectedCardView = null;
       _isDragging = false;
       _dragOffset = Vector3.zero;
-      _originalParent = null;
     }
   }
 }
