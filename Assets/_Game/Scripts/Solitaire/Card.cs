@@ -4,23 +4,31 @@ namespace Game.Solitaire
 {
   public class Card
   {
-    public CardRank Rank { get; }
-    public CardSuit Suit { get; }
+    public CardInfo Info { get; }
+    public Card? Child { get; private set; }
 
-    public CardColor Color =>
-      Suit is CardSuit.Hearts or CardSuit.Diamonds
-        ? CardColor.Red
-        : CardColor.Black;
+    public CardRank Rank => Info.Rank;
+    public CardSuit Suit => Info.Suit;
+    public CardColor Color => Info.Color;
 
     public Card(CardRank rank, CardSuit suit)
     {
-      Rank = rank;
-      Suit = suit;
+      Info = new CardInfo(rank, suit);
+    }
+
+    public Card(CardInfo info)
+    {
+      Info = info;
+    }
+
+    public void SetChild(Card? child)
+    {
+      Child = child;
     }
 
     public override string ToString()
     {
-      return $"{Rank} of {Suit}";
+      return Info.ToString();
     }
   }
 }
