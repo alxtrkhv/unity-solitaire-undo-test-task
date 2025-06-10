@@ -6,6 +6,10 @@ namespace Game.View
 {
   public class GameView : MonoBehaviour
   {
+    [Header("Settings")]
+    [SerializeField]
+    private float _cardInStackOffset;
+
     [Header("Prefabs")]
     [SerializeField]
     private CardView _cardViewPrefab = null!;
@@ -77,7 +81,6 @@ namespace Game.View
 
     public void RefreshAllViews()
     {
-      BoardView.UpdateAllViews();
       UpdateCardViewPositions();
     }
 
@@ -115,7 +118,7 @@ namespace Game.View
     private void PositionCardInPile(CardView cardView, int index, PileKind pileKind)
     {
       var position = pileKind switch {
-        PileKind.Tableau => new(0, -index * 0.3f, -index * 0.01f),
+        PileKind.Tableau => new(0, -index * _cardInStackOffset, -index * 0.01f),
         PileKind.Foundation or PileKind.Deck or PileKind.WastePile => new(0, 0, -index * 0.01f),
         _ => Vector3.zero
       };

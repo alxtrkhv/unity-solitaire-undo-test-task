@@ -6,10 +6,6 @@ namespace Game.View
 {
   public class SolitaireBoardView : MonoBehaviour
   {
-    [Header("Settings")]
-    [SerializeField]
-    private float _cardInStackOffset;
-
     [Header("Pile Containers")]
     [SerializeField]
     private List<PileView> _tableauViews = null!;
@@ -29,7 +25,6 @@ namespace Game.View
     {
       Board = board;
       CreatePileViews();
-      UpdateAllViews();
     }
 
     private void CreatePileViews()
@@ -44,20 +39,6 @@ namespace Game.View
 
       _deckView.SetPile(Board.Deck);
       _wasteView.SetPile(Board.WastePile);
-    }
-
-    public void UpdateAllViews()
-    {
-      foreach (var tableauView in _tableauViews) {
-        tableauView.RefreshCardPositions();
-      }
-
-      foreach (var foundationView in _foundationViews) {
-        foundationView.RefreshCardPositions();
-      }
-
-      _deckView.RefreshCardPositions();
-      _wasteView.RefreshCardPositions();
     }
 
     public PileView GetTableauView(int index)

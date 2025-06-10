@@ -36,6 +36,7 @@ namespace Game.Solitaire
 
       if (FirstChild == null) {
         FirstChild = card;
+        FirstChild?.SetPile(this);
         return;
       }
 

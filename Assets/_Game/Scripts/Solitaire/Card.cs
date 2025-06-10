@@ -37,7 +37,7 @@ namespace Game.Solitaire
       SetPile(Parent?.Pile);
     }
 
-    private void SetPile(Pile? pile)
+    public void SetPile(Pile? pile)
     {
       Pile = pile;
       Child?.SetPile(pile);
