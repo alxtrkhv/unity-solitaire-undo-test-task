@@ -30,7 +30,11 @@ namespace Game.Solitaire
 
     public void Append(Card? card)
     {
-      card?.SetPile(this);
+      if (card == null) {
+        return;
+      }
+
+      card.SetPile(this);
 
       if (FirstChild == null) {
         FirstChild = card;
@@ -41,6 +45,8 @@ namespace Game.Solitaire
       while (current.Child != null) {
         current = current.Child;
       }
+      
+      current.SetChild(card);
     }
 
     public void SetEmpty()
