@@ -10,13 +10,6 @@ namespace Game.View
     [SerializeField]
     private CardView _cardViewPrefab = null!;
 
-    [SerializeField]
-    private SolitaireBoardView _boardViewPrefab = null!;
-
-    [Header("Containers")]
-    [SerializeField]
-    private Transform _gameContainer = null!;
-
     private readonly Dictionary<Card, CardView> _cardViews = new();
 
     public SolitaireBoard Board { get; private set; } = null!;
@@ -35,7 +28,6 @@ namespace Game.View
 
     private void CreateBoardView()
     {
-      BoardView = Instantiate(_boardViewPrefab, _gameContainer);
       BoardView.Initialize(Board);
     }
 
