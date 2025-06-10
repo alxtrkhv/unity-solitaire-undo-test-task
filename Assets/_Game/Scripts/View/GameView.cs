@@ -10,10 +10,14 @@ namespace Game.View
     [SerializeField]
     private CardView _cardViewPrefab = null!;
 
+    [Header("References")]
+    [field: SerializeField]
+    public SolitaireBoardView BoardView { get; private set; } = null!;
+
     private readonly Dictionary<Card, CardView> _cardViews = new();
 
     public SolitaireBoard Board { get; private set; } = null!;
-    public SolitaireBoardView BoardView { get; private set; } = null!;
+
     public SolitaireMover Mover { get; private set; } = null!;
 
     public void Initialize(SolitaireBoard board)
@@ -87,7 +91,7 @@ namespace Game.View
 
     private void UpdateCardViewPositionsForPiles(Pile[] piles, System.Func<int, PileView> getPileView)
     {
-      for (int i = 0; i < piles.Length; i++) {
+      for (var i = 0; i < piles.Length; i++) {
         UpdateCardViewPositionsForPile(piles[i], getPileView(i));
       }
     }
@@ -112,7 +116,7 @@ namespace Game.View
     {
       var position = pileKind switch {
         PileKind.Tableau => new(0, -index * 0.3f, -index * 0.01f),
-        PileKind.Foundation or PileKind.Deck or PileKind.WastePile => new Vector3(0, 0, -index * 0.01f),
+        PileKind.Foundation or PileKind.Deck or PileKind.WastePile => new(0, 0, -index * 0.01f),
         _ => Vector3.zero
       };
 

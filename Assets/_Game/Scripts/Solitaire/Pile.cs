@@ -34,8 +34,6 @@ namespace Game.Solitaire
         return;
       }
 
-      card.SetPile(this);
-
       if (FirstChild == null) {
         FirstChild = card;
         return;
@@ -45,7 +43,7 @@ namespace Game.Solitaire
       while (current.Child != null) {
         current = current.Child;
       }
-      
+
       current.SetChild(card);
     }
 

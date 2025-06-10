@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Game.Solitaire;
 
@@ -5,26 +6,21 @@ namespace Game.View
 {
   public class SolitaireBoardView : MonoBehaviour
   {
-    [Header("Pile View Prefabs")]
+    [Header("Settings")]
     [SerializeField]
-    private PileView _pileViewPrefab = null!;
+    private float _cardInStackOffset;
 
     [Header("Pile Containers")]
     [SerializeField]
-    private Transform _tableauContainer = null!;
+    private List<PileView> _tableauViews = null!;
 
     [SerializeField]
-    private Transform _foundationContainer = null!;
+    private List<PileView> _foundationViews = null!;
 
     [SerializeField]
-    private Transform _deckContainer = null!;
-
-    [SerializeField]
-    private Transform _wasteContainer = null!;
-
-    private PileView[] _tableauViews = null!;
-    private PileView[] _foundationViews = null!;
     private PileView _deckView = null!;
+
+    [SerializeField]
     private PileView _wasteView = null!;
 
     public SolitaireBoard Board { get; private set; } = null!;
@@ -38,24 +34,15 @@ namespace Game.View
 
     private void CreatePileViews()
     {
-      _tableauViews = new PileView[Board.Settings.TableauColumns];
-      for (var i = 0; i < _tableauViews.Length; i++) {
-        var pileView = Instantiate(_pileViewPrefab, _tableauContainer);
-        pileView.SetPile(Board.Tableau[i]);
-        _tableauViews[i] = pileView;
+      for (var i = 0; i < _tableauViews.Count; i++) {
+        _tableauViews[i].SetPile(Board.Tableau[i]);
       }
 
-      _foundationViews = new PileView[Board.Settings.FoundationPiles];
-      for (var i = 0; i < _foundationViews.Length; i++) {
-        var pileView = Instantiate(_pileViewPrefab, _foundationContainer);
-        pileView.SetPile(Board.Foundations[i]);
-        _foundationViews[i] = pileView;
+      for (var i = 0; i < _foundationViews.Count; i++) {
+        _foundationViews[i].SetPile(Board.Foundations[i]);
       }
 
-      _deckView = Instantiate(_pileViewPrefab, _deckContainer);
       _deckView.SetPile(Board.Deck);
-
-      _wasteView = Instantiate(_pileViewPrefab, _wasteContainer);
       _wasteView.SetPile(Board.WastePile);
     }
 

@@ -31,16 +31,16 @@ namespace Game.Solitaire
       child?.SetParent(this);
     }
 
-    public void SetPile(Pile? pile)
-    {
-      Pile = pile;
-      Child?.SetPile(pile);
-    }
-
     public void SetParent(Card? parent)
     {
       Parent = parent;
       SetPile(Parent?.Pile);
+    }
+
+    private void SetPile(Pile? pile)
+    {
+      Pile = pile;
+      Child?.SetPile(pile);
     }
 
     public override string ToString()
