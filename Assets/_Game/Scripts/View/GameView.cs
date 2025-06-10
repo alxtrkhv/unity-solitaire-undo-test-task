@@ -24,14 +24,36 @@ namespace Game.View
 
     public SolitaireMover Mover { get; private set; } = null!;
 
-    public void Initialize(SolitaireBoard board)
+    public void Initialize()
     {
-      Board = board;
+      Board = CreateBoard();
       Mover = new(Board);
 
       CreateBoardView();
       CreateCardViews();
       RefreshAllViews();
+    }
+
+    private SolitaireBoard CreateBoard()
+    {
+      var board = new SolitaireBoard();
+      var cards = CreateDeck();
+      board.Populate(cards);
+      return board;
+    }
+
+    private List<Card> CreateDeck()
+    {
+      var cards = new List<Card>();
+      var cardId = 0;
+
+      foreach (var suit in System.Enum.GetValues(typeof(CardSuit))) {
+        foreach (var rank in System.Enum.GetValues(typeof(CardRank))) {
+          cards.Add(new((CardRank)rank, (CardSuit)suit, cardId++));
+        }
+      }
+
+      return cards;
     }
 
     private void CreateBoardView()
@@ -72,11 +94,6 @@ namespace Game.View
       var cardView = Instantiate(_cardViewPrefab);
       cardView.SetCard(card);
       _cardViews[card] = cardView;
-    }
-
-    public CardView GetCardView(Card card)
-    {
-      return _cardViews.TryGetValue(card, out var cardView) ? cardView : null!;
     }
 
     public void RefreshAllViews()
