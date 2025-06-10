@@ -1,10 +1,9 @@
 using System.Collections.Generic;
+using Game.Solitaire;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Game.Solitaire;
-using Game.View;
 
-namespace Game.Input
+namespace Game.View
 {
   public class SolitaireInput : MonoBehaviour
   {
@@ -38,20 +37,16 @@ namespace Game.Input
 
     private void HandleInput()
     {
-      if (UnityEngine.Input.GetMouseButtonDown(0)) {
+      if (Input.GetMouseButtonDown(0)) {
         HandleMouseDown();
-      } else if (UnityEngine.Input.GetMouseButton(0) && _isDragging) {
+      } else if (Input.GetMouseButton(0) && _isDragging) {
         HandleMouseDrag();
-      } else if (UnityEngine.Input.GetMouseButtonUp(0)) {
+      } else if (Input.GetMouseButtonUp(0)) {
         HandleMouseUp();
       }
 
-      if (UnityEngine.Input.GetMouseButtonDown(1) || UnityEngine.Input.GetKeyDown(KeyCode.U)) {
+      if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.U)) {
         _gameView.UndoLastMove();
-      }
-
-      if (UnityEngine.Input.GetMouseButtonDown(2) || UnityEngine.Input.GetKeyDown(KeyCode.R)) {
-        _gameView.ResetDeck();
       }
     }
 
@@ -110,7 +105,7 @@ namespace Game.Input
     private CardView? GetCardViewUnderMouse()
     {
       var pointerEventData = new PointerEventData(EventSystem.current) {
-        position = UnityEngine.Input.mousePosition
+        position = Input.mousePosition
       };
 
       EventSystem.current.RaycastAll(pointerEventData, _results);
@@ -128,7 +123,7 @@ namespace Game.Input
     private Pile? GetPileUnderMouse()
     {
       var pointerEventData = new PointerEventData(EventSystem.current) {
-        position = UnityEngine.Input.mousePosition
+        position = Input.mousePosition
       };
 
       EventSystem.current.RaycastAll(pointerEventData, _results);
@@ -180,24 +175,24 @@ namespace Game.Input
 
     private Vector3 GetMouseWorldPosition()
     {
-      var mouseScreenPos = UnityEngine.Input.mousePosition;
+      var mouseScreenPos = Input.mousePosition;
 
       if (_canvas.renderMode == RenderMode.ScreenSpaceOverlay) {
         return mouseScreenPos;
       }
 
       if (_canvas.renderMode == RenderMode.ScreenSpaceCamera) {
-        return _camera!.ScreenToWorldPoint(new(mouseScreenPos.x, mouseScreenPos.y, _canvas.planeDistance));
+        return _camera.ScreenToWorldPoint(new(mouseScreenPos.x, mouseScreenPos.y, _canvas.planeDistance));
       }
 
-      return _camera!.ScreenToWorldPoint(mouseScreenPos);
+      return _camera.ScreenToWorldPoint(mouseScreenPos);
     }
 
     private void ReturnCardToOriginalPosition()
     {
       if (_selectedCardView == null) return;
 
-      _gameView.RefreshAllViews();
+      _gameView.Refresh();
     }
 
     private void ResetSelection()
