@@ -8,37 +8,34 @@ namespace Game.Solitaire
   {
     public BoardSettings Settings { get; }
 
-    public Card?[] Tableau { get; }
+    public Pile[] Tableau { get; }
 
-    public Card?[] Foundations { get; }
+    public Pile[] Foundations { get; }
 
-    public Card? Deck { get; private set; }
+    public Pile Deck { get; }
 
-    public Card? WastePile { get; private set; }
+    public Pile WastePile { get; }
 
     public SolitaireBoard(BoardSettings? settings = null)
     {
       Settings = settings ?? BoardSettings.Default;
 
-      Tableau = new Card?[Settings.TableauColumns];
-      Foundations = new Card?[Settings.FoundationPiles];
-      Deck = null;
-      WastePile = null;
+      Tableau = new Pile[Settings.TableauColumns];
+      for (var i = 0; i < Tableau.Length; i++) {
+        Tableau[i] = new(PileKind.Tableau);
+      }
+
+      Foundations = new Pile[Settings.FoundationPiles];
+      for (var i = 0; i < Foundations.Length; i++) {
+        Foundations[i] = new(PileKind.Foundation);
+      }
+
+      Deck = new(PileKind.Deck);
+      WastePile = new(PileKind.WastePile);
     }
 
     public void Populate(IEnumerable<Card> cards)
     {
-      for (var i = 0; i < Tableau.Length; i++) {
-        Tableau[i] = null;
-      }
-
-      for (var i = 0; i < Foundations.Length; i++) {
-        Foundations[i] = null;
-      }
-
-      Deck = null;
-      WastePile = null;
-
       var shuffledCards = cards.ToList();
       var random = new Random();
       for (var i = shuffledCards.Count - 1; i > 0; i--) {
@@ -61,14 +58,14 @@ namespace Game.Solitaire
           if (columnHead == null) {
             columnHead = card;
           } else {
-            currentCard!.SetChild(card);
+            currentCard?.SetChild(card);
           }
 
           currentCard = card;
           cardIndex++;
         }
 
-        Tableau[column] = columnHead;
+        Tableau[column].Append(columnHead);
       }
 
       Card? deckHead = null;
@@ -86,7 +83,7 @@ namespace Game.Solitaire
         cardIndex++;
       }
 
-      Deck = deckHead;
+      Deck.Append(deckHead);
     }
   }
 }
